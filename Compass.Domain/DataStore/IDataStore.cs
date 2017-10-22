@@ -8,6 +8,7 @@ namespace Compass.Domain.DataStore
     public interface IDataStore
     {
         Task<T> GetByDocumentIdAsync<T>(string documentId) where T : Entity;
+        Task<IReadOnlyCollection<T>> GetByDocumentsIdAsync<T>(IEnumerable<string> documentIds) where T : Entity;
         Task<T> GetByIdentifierAsync<T>(string identifier) where T : Entity;
         Task<T> InsertAsync<T>(T entity) where T : Entity;
         Task<T> UpsertAsync<T>(T entity) where T : Entity;

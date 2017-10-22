@@ -34,6 +34,14 @@ namespace Compass.Domain.DataStore
             return documentResult.Content;
         }
 
+        public async Task<IReadOnlyCollection<T>> GetByDocumentsIdAsync<T>(IEnumerable<string> documentIds)
+            where T : Entity
+        {
+            var bucket = _couchbaseFactory.GetBucket();
+            var documentResult = await bucket.GetDocumentsAsync<T>(documentIds);
+            return documentResult.Select(result => result.Content).ToList();
+        }
+
         public async Task<T> GetByIdentifierAsync<T>(string identifier) where T : Entity
         {
             var bucketName = _compassEnvironment.GetCouchbaseBucketName();

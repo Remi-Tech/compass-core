@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Compass.Domain.DataStore;
 using Compass.Domain.Models;
 using Compass.Domain.Services.GetServiceSubscriptionsForEvent;
 using Compass.Domain.Services.KafkaStream;
 using Compass.Domain.Services.RouteRequest;
-using Compass.Domain.Services.RouteRequest.SendToEndpoint;
+using Compass.Domain.Services.SendToEndpoint;
 using Compass.Domain.Services.ValidateApplicationToken;
 using Xunit;
 using FakeItEasy;
@@ -20,6 +21,7 @@ namespace Compass.Domain.Tests.Services.RouteRequest
         private readonly IValidateApplicationTokenService _validateApplicationTokenService;
         private readonly IKafkaStreamService _kafkaStreamService;
         private readonly IGetServiceSubscriptionsForEventService _getServiceSubscriptionsForEventService;
+        private readonly IDataStore _dataStore;
 
         public RouteRequestServiceTests()
         {
@@ -27,12 +29,14 @@ namespace Compass.Domain.Tests.Services.RouteRequest
             _validateApplicationTokenService = A.Fake<IValidateApplicationTokenService>();
             _kafkaStreamService = A.Fake<IKafkaStreamService>();
             _getServiceSubscriptionsForEventService = A.Fake<IGetServiceSubscriptionsForEventService>();
+            _dataStore = A.Fake<IDataStore>();
 
             _sut = new RouteRequestService(
                 _sendToEndpointService,
                 _validateApplicationTokenService,
                 _kafkaStreamService,
-                _getServiceSubscriptionsForEventService
+                _getServiceSubscriptionsForEventService,
+                _dataStore
             );
         }
 
@@ -92,7 +96,7 @@ namespace Compass.Domain.Tests.Services.RouteRequest
             await _sut.RouteRequest(compassEvent);
 
             // Assert
-            A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(subscriptions, (object)compassEvent.Payload))
+            A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(subscriptions, compassEvent.EventName, (object)compassEvent.Payload))
              .MustHaveHappened(Repeated.Exactly.Once);
         }
     }

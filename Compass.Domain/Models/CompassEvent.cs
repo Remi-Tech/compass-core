@@ -8,7 +8,7 @@ namespace Compass.Domain.Models
         public string UserId { get; set; }
         public string EventName { get; set; }
         public Guid ApplicationToken { get; set; }
-        public dynamic Payload { get; set; }
+        public object Payload { get; set; }
         internal DateTime DateCreated { get; set; }
         public override string DocType => nameof(CompassEvent);
     }

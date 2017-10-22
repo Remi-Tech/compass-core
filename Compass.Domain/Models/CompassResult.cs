@@ -4,8 +4,8 @@ namespace Compass.Domain.Models
 {
     public class CompassResult
     {
-        public string Message { get; set; }
-        public bool Success { get; set; }
-        public List<dynamic> Response { get; set; } = new List<dynamic>();
+        public ICollection<string> Message { get; set; }
+        public CompassResponseStatus Success { get; set; }
+        public object Response { get; set; } = new List<object>();
     }
 }

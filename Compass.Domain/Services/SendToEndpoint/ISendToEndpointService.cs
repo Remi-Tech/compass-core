@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Compass.Domain.Models;
 
-namespace Compass.Domain.Services.RouteRequest.SendToEndpoint
+namespace Compass.Domain.Services.SendToEndpoint
 {
     public interface ISendToEndpointService
     {
-        Task<dynamic[]> SendToEndpointAsync(IReadOnlyCollection<ServiceSubscription> subscriptions, dynamic payload);
+        Task<IReadOnlyCollection<SendToEndpointResult>> SendToEndpointAsync(IReadOnlyCollection<ServiceSubscription> subscriptions, string eventName, object payload);
     }
 }

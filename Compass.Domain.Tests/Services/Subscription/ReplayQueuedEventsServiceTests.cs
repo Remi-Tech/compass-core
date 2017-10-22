@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using Compass.Domain.DataStore;
 using Compass.Domain.Models;
 using Compass.Domain.Services.QueueEvent;
-using Compass.Domain.Services.RouteRequest.SendToEndpoint;
+using Compass.Domain.Services.SendToEndpoint;
 using Compass.Domain.Services.Subscription;
 using Xunit;
 using FakeItEasy;
 
 namespace Compass.Domain.Tests.Services.Subscription
 {
-    
+
     public class ReplayQueuedEventsServiceTests
     {
         private readonly IReplayQueuedEventsService _sut;
@@ -35,7 +35,7 @@ namespace Compass.Domain.Tests.Services.Subscription
             var serviceSubscription = new ServiceSubscription
             {
                 ApplicationUri = new Uri("http://www.example.com/"),
-                SubscribedEvents = new List<string>() {"test", "test2"}
+                SubscribedEvents = new List<string>() { "test", "test2" }
             };
 
             var compassEvents = new List<CompassEvent>()
@@ -62,19 +62,19 @@ namespace Compass.Domain.Tests.Services.Subscription
             A.CallTo(() => _dataStore.GetRegisteredApplicationAsync(serviceSubscription.ApplicationToken))
              .Returns(Task.FromResult(
                  new RegisteredApplication() { LastEventsSubscribed = new List<string>() { "test" } }));
-            
+
             // Act
             await _sut.ReplayQueuedEvents(serviceSubscription);
 
             // Assert
             A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(
                     A<List<ServiceSubscription>>.That.IsSameSequenceAs(
-                        new List<ServiceSubscription> {serviceSubscription}), (object) compassEvents[0].Payload))
+                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[0].EventName, compassEvents[0].Payload))
                 .MustHaveHappened(Repeated.Exactly.Once);
 
             A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(
                     A<List<ServiceSubscription>>.That.IsSameSequenceAs(
-                        new List<ServiceSubscription> { serviceSubscription }), (object)compassEvents[1].Payload))
+                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[1].EventName, compassEvents[1].Payload))
                 .MustHaveHappened(Repeated.Exactly.Once);
         }
 
@@ -118,15 +118,15 @@ namespace Compass.Domain.Tests.Services.Subscription
             // Act
             await _sut.ReplayQueuedEvents(serviceSubscription);
 
-			// Assert
+            // Assert
             A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(
                     A<List<ServiceSubscription>>.That.IsSameSequenceAs(
-                        new List<ServiceSubscription> {serviceSubscription}), (object) compassEvents[0].Payload))
+                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[0].EventName, compassEvents[0].Payload))
                 .MustHaveHappened(Repeated.Exactly.Once);
 
             A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(
                     A<List<ServiceSubscription>>.That.IsSameSequenceAs(
-                        new List<ServiceSubscription> { serviceSubscription }), (object)compassEvents[1].Payload))
+                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[1].EventName, compassEvents[1].Payload))
                         .MustNotHaveHappened();
         }
     }

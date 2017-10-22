@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Compass.Domain.DataStore;
 using Compass.Domain.Models;
 using Compass.Domain.Services.QueueEvent;
-using Compass.Domain.Services.RouteRequest.SendToEndpoint;
+using Compass.Domain.Services.SendToEndpoint;
 
 namespace Compass.Domain.Services.Subscription
 {
@@ -71,7 +71,7 @@ namespace Compass.Domain.Services.Subscription
             await _sendToEndpointService.SendToEndpointAsync(new List<ServiceSubscription>()
             {
                 serviceSubscription
-            }, compassEvent.Payload);
+            }, compassEvent.EventName, compassEvent.Payload);
             await _queueEventService.DeQueueEventAsync(compassEvent);
         }
     }
