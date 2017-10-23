@@ -69,12 +69,12 @@ namespace Compass.Domain.Tests.Services.Subscription
             // Assert
             A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(
                     A<List<ServiceSubscription>>.That.IsSameSequenceAs(
-                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[0].EventName, compassEvents[0].Payload))
+                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[0]))
                 .MustHaveHappened(Repeated.Exactly.Once);
 
             A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(
                     A<List<ServiceSubscription>>.That.IsSameSequenceAs(
-                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[1].EventName, compassEvents[1].Payload))
+                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[1]))
                 .MustHaveHappened(Repeated.Exactly.Once);
         }
 
@@ -121,12 +121,12 @@ namespace Compass.Domain.Tests.Services.Subscription
             // Assert
             A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(
                     A<List<ServiceSubscription>>.That.IsSameSequenceAs(
-                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[0].EventName, compassEvents[0].Payload))
+                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[0]))
                 .MustHaveHappened(Repeated.Exactly.Once);
 
             A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(
                     A<List<ServiceSubscription>>.That.IsSameSequenceAs(
-                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[1].EventName, compassEvents[1].Payload))
+                        new List<ServiceSubscription> { serviceSubscription }), compassEvents[1]))
                         .MustNotHaveHappened();
         }
     }

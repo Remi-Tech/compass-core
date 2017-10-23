@@ -96,7 +96,7 @@ namespace Compass.Domain.Tests.Services.RouteRequest
             await _sut.RouteRequest(compassEvent);
 
             // Assert
-            A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(subscriptions, compassEvent.EventName, (object)compassEvent.Payload))
+            A.CallTo(() => _sendToEndpointService.SendToEndpointAsync(subscriptions, compassEvent))
              .MustHaveHappened(Repeated.Exactly.Once);
         }
     }
