@@ -1,0 +1,7 @@
+{
+    "applicationToken": "d752f000-a4f4-4626-8eb9-2941b9582c4a",
+    "applicationUri": "http://blah.com",
+    "eventsSubscribed": [
+        "AddPhone"
+    ]
+}

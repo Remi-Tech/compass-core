@@ -1,0 +1,9 @@
+{
+    "applicationToken": "d752f000-a4f4-4626-8eb9-2941b9582c4a",
+    "applicationName": "AddPhoneService",
+    "lastSeen": "2012-04-23T18:25:43.511Z",
+    "lastEventsSubscribed": [
+        "AddPhone"
+    ],
+    "isRevoked": false
+}
