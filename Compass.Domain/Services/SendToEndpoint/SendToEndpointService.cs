@@ -25,7 +25,7 @@ namespace Compass.Domain.Services.SendToEndpoint
             _sendToEndpointPolicy = sendToEndpointPolicy;
         }
 
-        public async Task<IReadOnlyCollection<SendToEndpointResult>> SendToEndpointAsync(IReadOnlyCollection<ServiceSubscription> subscriptions, string eventName, object payload)
+        public async Task<IReadOnlyCollection<SendToEndpointResult>> SendToEndpointAsync(IReadOnlyCollection<ServiceSubscription> subscriptions, CompassEvent compassEvent)
         {
             var tasks = subscriptions.Select(async subscription =>
             {
@@ -33,7 +33,7 @@ namespace Compass.Domain.Services.SendToEndpoint
                     new SendToEndpointResult {ApplicationToken = subscription.ApplicationToken.ToString()};
                 try
                 {
-                    sendToEndpointResult.Result = await SendAsync(subscription.ApplicationUri, eventName, payload); 
+                    sendToEndpointResult.Result = await SendAsync(subscription.ApplicationUri, compassEvent); 
                     sendToEndpointResult.Success = true;
                 }
                 catch (Exception)
@@ -47,11 +47,19 @@ namespace Compass.Domain.Services.SendToEndpoint
             return await Task.WhenAll(tasks);
         }
 
-        private async Task<object> SendAsync(Uri endpoint, string eventName, object payload)
+        private async Task<object> SendAsync(Uri endpoint, CompassEvent compassEvent)
         {
             const string header = "application/json";
             var client = GetHttpClient(header);
-            var queryContent = new StringContent(JsonConvert.SerializeObject(new { EventName = eventName, Payload = payload }), Encoding.UTF8, header);
+            var queryContent =
+                new StringContent(
+                    JsonConvert.SerializeObject(new
+                    {
+                        ApplicationToken = compassEvent.ApplicationToken,
+                        ApplicationName = compassEvent.ApplicationName,
+                        EventName = compassEvent.EventName,
+                        Payload = compassEvent.Payload
+                    }), Encoding.UTF8, header);
 
             var response = await _sendToEndpointPolicy.GetPolicy()
                 .ExecuteAsync<HttpResponseMessage>(() => client.PostAsync(endpoint, queryContent));

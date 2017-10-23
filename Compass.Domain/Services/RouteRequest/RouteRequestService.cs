@@ -52,7 +52,7 @@ namespace Compass.Domain.Services.RouteRequest
             var registeredApplicationTask =
                 _dataStore.GetByDocumentsIdAsync<RegisteredApplication>(
                     subscriptions.Select(subscription => subscription.ApplicationToken.ToString()));
-            var sendToEndpointTask = _sendToEndpointService.SendToEndpointAsync(subscriptions, compassEvent.EventName, compassEvent.Payload);
+            var sendToEndpointTask = _sendToEndpointService.SendToEndpointAsync(subscriptions, compassEvent);
             await Task.WhenAll(registeredApplicationTask, sendToEndpointTask);
             var registeredApplications = await registeredApplicationTask;
             var responses = await sendToEndpointTask;

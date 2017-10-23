@@ -68,10 +68,8 @@ namespace Compass.Domain.Services.Subscription
 
         private async Task SendEvent(ServiceSubscription serviceSubscription, CompassEvent compassEvent)
         {
-            await _sendToEndpointService.SendToEndpointAsync(new List<ServiceSubscription>()
-            {
-                serviceSubscription
-            }, compassEvent.EventName, compassEvent.Payload);
+            await _sendToEndpointService.SendToEndpointAsync(new List<ServiceSubscription> {serviceSubscription},
+                compassEvent);
             await _queueEventService.DeQueueEventAsync(compassEvent);
         }
     }

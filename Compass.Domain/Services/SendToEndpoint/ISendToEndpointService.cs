@@ -6,6 +6,6 @@ namespace Compass.Domain.Services.SendToEndpoint
 {
     public interface ISendToEndpointService
     {
-        Task<IReadOnlyCollection<SendToEndpointResult>> SendToEndpointAsync(IReadOnlyCollection<ServiceSubscription> subscriptions, string eventName, object payload);
+        Task<IReadOnlyCollection<SendToEndpointResult>> SendToEndpointAsync(IReadOnlyCollection<ServiceSubscription> subscriptions, CompassEvent compassEvent);
     }
 }
