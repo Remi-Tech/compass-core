@@ -76,7 +76,7 @@ namespace Compass.KafkaListener
         {
             return new Dictionary<string, object>
             {
-                {"group.id", Guid.NewGuid().ToString()},
+                {"group.id", "mygroup"},
                 {"enable.auto.commit", true},
                 {"auto.commit.interval.ms", 5000},
                 {"statistics.interval.ms", 60000},
