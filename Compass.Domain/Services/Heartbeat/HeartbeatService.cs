@@ -40,7 +40,7 @@ namespace Compass.Domain.Services.Heartbeat
             if (subscription == null)
             {
                 subscription = serviceSubscription;
-                subscription.Identifier = serviceSubscription.ApplicationToken;
+                subscription.Identifier = Guid.NewGuid();
             }
 
             return subscription;
