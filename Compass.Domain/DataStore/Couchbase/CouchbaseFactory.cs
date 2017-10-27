@@ -8,7 +8,7 @@ using Couchbase.Linq;
 
 namespace Compass.Domain.DataStore.Couchbase
 {
-    public class CouchbaseFactory : ICouchbaseFactory
+    public class CouchbaseFactory : ICouchbaseFactory, IDisposable
     {
         private readonly ICompassEnvironment _compassEnvironment;
         private readonly ICluster _cluster;
@@ -21,7 +21,6 @@ namespace Compass.Domain.DataStore.Couchbase
             {
                 Servers = new List<Uri> { _compassEnvironment.GetCouchbaseUri() }
             });
-
         }
 
         public IBucket GetBucket()
@@ -29,9 +28,9 @@ namespace Compass.Domain.DataStore.Couchbase
             return _cluster.OpenBucket(_compassEnvironment.GetCouchbaseBucketName());
         }
 
-        public IBucketContext GetBucketContext()
+        public void Dispose()
         {
-            return new BucketContext(GetBucket());
+            _cluster?.Dispose();
         }
     }
 }

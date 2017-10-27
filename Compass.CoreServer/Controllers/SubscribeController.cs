@@ -20,6 +20,7 @@ namespace Compass.CoreServer.Controllers
         [HttpPost("subscribe")]
         public async Task<ServiceSubscription> Subscribe([FromBody]ServiceSubscription serviceSubscription)
         {
+            return new ServiceSubscription();
             return await _subscriptionService.SubscribeAsync(serviceSubscription);
         }
 

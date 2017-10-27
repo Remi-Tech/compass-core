@@ -29,17 +29,21 @@ namespace Compass.Domain.DataStore
         public async Task<T> GetByDocumentIdAsync<T>(string documentId)
             where T : Entity
         {
-            var bucket = _couchbaseFactory.GetBucket();
-            var documentResult = await bucket.GetDocumentAsync<T>(documentId);
-            return documentResult.Content;
+            using (var bucket = _couchbaseFactory.GetBucket())
+            {
+                var documentResult = await bucket.GetDocumentAsync<T>(documentId);
+                return documentResult.Content;
+            }
         }
 
         public async Task<IReadOnlyCollection<T>> GetByDocumentsIdAsync<T>(IEnumerable<string> documentIds)
             where T : Entity
         {
-            var bucket = _couchbaseFactory.GetBucket();
-            var documentResult = await bucket.GetDocumentsAsync<T>(documentIds);
-            return documentResult.Select(result => result.Content).ToList();
+            using (var bucket = _couchbaseFactory.GetBucket())
+            {
+                var documentResult = await bucket.GetDocumentsAsync<T>(documentIds);
+                return documentResult.Select(result => result.Content).ToList();
+            }
         }
 
         public async Task<T> GetByIdentifierAsync<T>(string identifier) where T : Entity
@@ -65,9 +69,11 @@ namespace Compass.Domain.DataStore
                 Content = entity
             };
 
-            var bucket = _couchbaseFactory.GetBucket();
-            await bucket.InsertAsync(document);
-            return entity;
+            using (var bucket = _couchbaseFactory.GetBucket())
+            {
+                await bucket.InsertAsync(document);
+                return entity;
+            }
         }
 
         public async Task<T> UpsertAsync<T>(T entity)
@@ -92,9 +98,11 @@ namespace Compass.Domain.DataStore
                 document.Expiry = ttl.Value;
             }
 
-            var bucket = _couchbaseFactory.GetBucket();
-            await bucket.UpsertAsync(document);
-            return entity;
+            using (var bucket = _couchbaseFactory.GetBucket())
+            {
+                await bucket.UpsertAsync(document);
+                return entity;
+            }
         }
 
         private static void ValidateIdentifier<T>(T entity) where T : Entity
@@ -136,7 +144,7 @@ namespace Compass.Domain.DataStore
                 WHERE applicationToken = '{applicationToken}'
                 AND docType = '{nameof(RegisteredApplication)}'";
 
-            var queryResult =  await _couchbaseClient.QueryAsync<RegisteredApplication>(query);
+            var queryResult = await _couchbaseClient.QueryAsync<RegisteredApplication>(query);
             return queryResult.SingleOrDefault();
         }
 

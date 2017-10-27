@@ -61,9 +61,12 @@ namespace Compass.CoreServer
             // registration and register your own implementation of IDataStore
             // for Compass Core Server to use.
 
+            // Use a singleton to establish a single connection
+            // to couchbase.
             builder.RegisterType<CouchbaseFactory>()
                 .As<ICouchbaseFactory>()
                 .InstancePerLifetimeScope();
+                //.SingleInstance();
 
             // Using this homegrown couchbase client because of a bug 
             // in .NET Core.
