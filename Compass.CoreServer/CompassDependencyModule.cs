@@ -65,7 +65,6 @@ namespace Compass.CoreServer
             // to couchbase.
             builder.RegisterType<CouchbaseFactory>()
                 .As<ICouchbaseFactory>()
-                //.InstancePerLifetimeScope();
                 .SingleInstance();
 
             // Using this homegrown couchbase client because of a bug 
