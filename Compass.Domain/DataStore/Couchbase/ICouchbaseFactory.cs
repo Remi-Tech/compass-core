@@ -6,6 +6,5 @@ namespace Compass.Domain.DataStore.Couchbase
     public interface ICouchbaseFactory
     {
         IBucket GetBucket();
-        IBucketContext GetBucketContext();
     }
 }

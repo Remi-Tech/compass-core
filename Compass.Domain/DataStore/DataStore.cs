@@ -136,7 +136,7 @@ namespace Compass.Domain.DataStore
                 WHERE applicationToken = '{applicationToken}'
                 AND docType = '{nameof(RegisteredApplication)}'";
 
-            var queryResult =  await _couchbaseClient.QueryAsync<RegisteredApplication>(query);
+            var queryResult = await _couchbaseClient.QueryAsync<RegisteredApplication>(query);
             return queryResult.SingleOrDefault();
         }
 

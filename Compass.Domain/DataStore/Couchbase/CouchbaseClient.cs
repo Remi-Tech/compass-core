@@ -22,14 +22,16 @@ namespace Compass.Domain.DataStore.Couchbase
         public async Task<IEnumerable<T>> QueryAsync<T>(string query)
         {
             var queryContent = new StringContent(JsonConvert.SerializeObject(new { Statement = query }), Encoding.UTF8, "application/json");
-            var response = await GetHttpClient().PostAsync(GetCouchbaseUri(), queryContent);
-            var resultString = await response.Content.ReadAsStringAsync();
+            using (var client = GetHttpClient())
+            {
+                var response = await client.PostAsync(GetCouchbaseUri(), queryContent);
+                var resultString = await response.Content.ReadAsStringAsync();
+                if (string.IsNullOrWhiteSpace(resultString)) return new List<T>();
 
-            if (string.IsNullOrWhiteSpace(resultString)) return new List<T>();
-
-            var couchbaseResult = JsonConvert.DeserializeObject<CouchbaseQueryResult<T>>(resultString);
-            ValidateResult(couchbaseResult);
-            return couchbaseResult.Results;
+                var couchbaseResult = JsonConvert.DeserializeObject<CouchbaseQueryResult<T>>(resultString);
+                ValidateResult(couchbaseResult);
+                return couchbaseResult.Results;
+            }
         }
 
         private static void ValidateResult<T>(CouchbaseQueryResult<T> result)
@@ -37,7 +39,7 @@ namespace Compass.Domain.DataStore.Couchbase
             if (string.CompareOrdinal(result.Status, "success") == 0) return;
             throw new Exception(string.Join(',', result.Errors.Select(e => e.Msg)));
         }
-        
+
         private static HttpClient GetHttpClient()
         {
             var client = new HttpClient();

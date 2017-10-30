@@ -12,6 +12,7 @@ namespace Compass.Domain.DataStore.Couchbase
     {
         private readonly ICompassEnvironment _compassEnvironment;
         private readonly ICluster _cluster;
+        private readonly IBucket _bucket;
 
         public CouchbaseFactory(ICompassEnvironment compassEnvironment)
         {
@@ -22,16 +23,12 @@ namespace Compass.Domain.DataStore.Couchbase
                 Servers = new List<Uri> { _compassEnvironment.GetCouchbaseUri() }
             });
 
+            _bucket = _cluster.OpenBucket(_compassEnvironment.GetCouchbaseBucketName());
         }
 
         public IBucket GetBucket()
         {
-            return _cluster.OpenBucket(_compassEnvironment.GetCouchbaseBucketName());
-        }
-
-        public IBucketContext GetBucketContext()
-        {
-            return new BucketContext(GetBucket());
+            return _bucket;
         }
     }
 }
