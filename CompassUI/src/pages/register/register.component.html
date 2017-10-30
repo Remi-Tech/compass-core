@@ -1,0 +1,25 @@
+<form [formGroup]="appForm" class="ui-g">
+    <div class="register ui-g-11">
+        <div class="header">
+            <h2>Application Registry</h2>
+        </div>
+
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-6">
+                <label>Application Name*: </label>
+                <input #appName pInputText type="text" size="30" formControlName="appName" placeholder="Name" />
+                <button (click)="addAppName(appName.value)" pButton type="button" icon="fa-plus" label="Add"></button>
+            </div>
+
+            <div class="ui-grid-col-4">
+                <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!appForm.controls['appName'].valid&&appForm.controls['appName'].dirty">
+                    <i class="fa fa-close"></i> Application Name is required
+                </div>
+            </div>
+        </div>
+        
+        <h3>Application Token</h3>
+        <input id="appToken" type="text" size="30" pInputText [disabled]="true" />
+        <label for="appToken">Guid</label>
+    </div>
+</form>

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.IO;
+using Autofac;
 using Compass.CoreServer.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +48,17 @@ namespace Compass.CoreServer
                 builder.AllowAnyMethod();
             });
 
+            // Redirect 404 errors to the angular app for routing
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
+                {
+                    context.Request.Path = "/index.html";
+                    await next();
+                }
+            });
+
             // Global error handler. Any exception in the system
             // will be handled by ErrorHandlingMiddleware
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
@@ -55,6 +67,10 @@ namespace Compass.CoreServer
 
             // use application token middle
             app.UseMvc();
+
+            // Allow serving of static files from wwwroot
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

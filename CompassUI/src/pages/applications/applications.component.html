@@ -1,0 +1,21 @@
+<div class="view-all ui-g-11">
+    <div class="header">
+        <h2> All Applications </h2>
+    </div>
+
+    <p-dataTable [value]="applicationsList" class="ui-g-12">
+        <p-column field="applicationName" header="Application Name"></p-column>
+        <p-column field="applicationToken" header="Application Token"></p-column>
+        <p-column header="Revoke" styleClass="col-button">
+            <ng-template let-selectedApp="rowData" pTemplate="body">
+                <button type="button" pButton (click)="revokeAppToken(selectedApp)" *ngIf="!selectedApp.isRevoked" icon="fa-minus" label="Revoke"></button>
+                <span class="revoked" *ngIf="selectedApp.isRevoked">Revoked</span>
+            </ng-template>
+        </p-column>
+        <!-- <p-column header="Grant" styleClass="col-button">
+            <ng-template let-selectedApp="rowData" pTemplate="body">
+                <button type="button" pButton (click)="grantApp()" icon="fa-plus" label="Grant"></button>
+            </ng-template> 
+        </p-column> -->
+    </p-dataTable>
+</div>

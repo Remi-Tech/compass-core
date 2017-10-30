@@ -1,0 +1,27 @@
+.content-body {
+    margin-left: 135px;
+}
+
+#header {
+    background-color: #DDDDDD;
+    height: 90px;
+    position: fixed;
+    top: 0px;
+    z-index: 99;
+    width: 100%;
+    font-size: xx-large;
+    font-family: "Roboto";
+}
+
+#sidenav {
+    height: 100%;
+    position: fixed;
+    top: 90px;
+    padding-top: 1em;
+    background-color: #2D353C !important;
+}
+
+#content-body {
+    padding-top: 90px;
+}
+

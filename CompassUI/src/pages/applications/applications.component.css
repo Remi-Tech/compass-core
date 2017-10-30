@@ -1,0 +1,24 @@
+p-dataTable >>> .col-button{
+    width: 130px;
+    text-align: center;
+}
+
+.view-all{
+    background-color: white;
+    font-family: "Roboto";
+    padding: 1em;
+    margin-top: 30px;
+}
+  
+.header {
+    padding: 1em;
+    color: white;
+    background-color: #95BAF1;
+    margin-bottom: 1em;
+}
+  
+h2 {
+    font-size: xx-large;
+    display: inline;
+}
+

@@ -1,0 +1,32 @@
+body {
+    background-color: #EEEEEE !important;
+    margin: 0px;
+    font-size: 1em !important;
+}
+  
+.ui-panel-titlebar {
+    background-color: #2F8EE5 !important;
+    color: white !important;
+}
+  
+.ui-menu {
+    width: auto !important;
+    margin: 0px !important;
+    border: none !important;
+    background-color: #2D343C !important;
+}
+  
+.ui-menuitem-text {
+    color: #FFFFFF !important;
+}
+  
+.ui-menuitem-icon {
+    color: white !important;
+    font-size: large !important;
+    margin-right: 1em;
+}
+  
+.menu-selected {
+    background-color: #0030E9 !important;
+    color: #ffffff;
+}
