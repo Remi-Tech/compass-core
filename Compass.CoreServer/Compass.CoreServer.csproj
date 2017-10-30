@@ -46,4 +46,8 @@
     <ProjectReference Include="..\Compass.Domain\Compass.Domain.csproj" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="cd ../CompassUI &amp;&amp; npm run build-prod" />
+  </Target>
+
 </Project>
