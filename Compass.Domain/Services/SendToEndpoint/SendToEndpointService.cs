@@ -63,6 +63,9 @@ namespace Compass.Domain.Services.SendToEndpoint
 
             var response = await _sendToEndpointPolicy.GetPolicy()
                 .ExecuteAsync<HttpResponseMessage>(() => client.PostAsync(endpoint, queryContent));
+
+            response.EnsureSuccessStatusCode();
+
             var result = await response.Content.ReadAsStringAsync();
 
             return result == null ? null : JsonConvert.DeserializeObject<object>(result);
