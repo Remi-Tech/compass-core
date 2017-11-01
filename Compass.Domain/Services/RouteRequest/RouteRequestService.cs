@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Compass.Domain.DataStore;
 using Compass.Domain.Models;
-using Compass.Domain.Services.KafkaStream;
 using Compass.Domain.Services.ValidateApplicationToken;
 using Compass.Domain.Services.GetServiceSubscriptionsForEvent;
+using Compass.Domain.Services.KafkaProducer;
 using Compass.Domain.Services.SendToEndpoint;
 
 namespace Compass.Domain.Services.RouteRequest
@@ -17,21 +17,21 @@ namespace Compass.Domain.Services.RouteRequest
     {
         private readonly ISendToEndpointService _sendToEndpointService;
         private readonly IValidateApplicationTokenService _validateApplicationTokenService;
-        private readonly IKafkaStreamService _kafkaStreamService;
+        private readonly IKafkaProducerService _kafkaProducerService;
         private readonly IGetServiceSubscriptionsForEventService _getServiceSubscriptionsForEventService;
         private readonly IDataStore _dataStore;
 
         public RouteRequestService(
             ISendToEndpointService sendToEndpointService,
             IValidateApplicationTokenService validateApplicationTokenService,
-            IKafkaStreamService kafkaStreamService,
+            IKafkaProducerService kafkaProducerService,
             IGetServiceSubscriptionsForEventService getServiceSubscriptionsForEventService,
             IDataStore dataStore
             )
         {
             _sendToEndpointService = sendToEndpointService;
             _validateApplicationTokenService = validateApplicationTokenService;
-            _kafkaStreamService = kafkaStreamService;
+            _kafkaProducerService = kafkaProducerService;
             _getServiceSubscriptionsForEventService = getServiceSubscriptionsForEventService;
             _dataStore = dataStore;
         }
@@ -42,7 +42,7 @@ namespace Compass.Domain.Services.RouteRequest
             var subscriptions =
                 await _getServiceSubscriptionsForEventService.GetServiceSubscriptionsAsync(compassEvent);
 
-            _kafkaStreamService.StreamToKafka(compassEvent);
+            _kafkaProducerService.Produce(compassEvent);
 
             return await SendToSubscriptionsAsync(compassEvent, subscriptions);
         }

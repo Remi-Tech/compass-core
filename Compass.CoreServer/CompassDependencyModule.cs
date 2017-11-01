@@ -6,7 +6,7 @@ using Autofac;
 using Compass.Domain;
 using Compass.Domain.DataStore;
 using Compass.Domain.DataStore.Couchbase;
-using Compass.Domain.Services.KafkaStream;
+using Compass.Domain.Services.KafkaProducer;
 using Compass.Domain.Services.RegisterNewApplication;
 using Compass.Shared;
 using Module = Autofac.Module;
@@ -18,7 +18,7 @@ namespace Compass.CoreServer
         protected override void Load(ContainerBuilder builder)
         {
             var postfixes = new List<string> {"Service", "Policy"};
-            var exclude = new List<Type> {typeof(CircuitBreakerPolicy), typeof(KafkaStreamService) };
+            var exclude = new List<Type> {typeof(CircuitBreakerPolicy), typeof(KafkaProducerService) };
             // Register Domain Services
             var assembly = typeof(IRegisterNewApplicationService).GetTypeInfo().Assembly;
             builder.RegisterAssemblyTypes(assembly)
@@ -50,8 +50,8 @@ namespace Compass.CoreServer
 
         private void RegisterKafkaService(ContainerBuilder builder)
         {
-            builder.RegisterType<KafkaStreamService>()
-                .As<IKafkaStreamService>()
+            builder.RegisterType<KafkaProducerService>()
+                .As<IKafkaProducerService>()
                 .SingleInstance();
         }
 

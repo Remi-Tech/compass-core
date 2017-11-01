@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Compass.Domain.DataStore;
 using Compass.Domain.Exceptions;
 using Compass.Domain.Models;
-using Compass.Domain.Services.KafkaStream;
+using Compass.Domain.Services.KafkaProducer;
 using Compass.Domain.Services.RegisterNewApplication;
 using Xunit;
 using FakeItEasy;
@@ -15,13 +15,13 @@ namespace Compass.Domain.Tests.Services.RegisterNewApplication
     {
         private readonly RegisterNewApplicationService _sut;
         private readonly IDataStore _dataStore;
-        private readonly IKafkaStreamService _kafkaStreamService;
+        private readonly IKafkaProducerService _kafkaProducerService;
 
         public RegisterNewApplicationServiceTests()
         {
             _dataStore = A.Fake<IDataStore>();
-            _kafkaStreamService = A.Fake<IKafkaStreamService>();
-            _sut = new RegisterNewApplicationService(_dataStore, _kafkaStreamService);
+            _kafkaProducerService = A.Fake<IKafkaProducerService>();
+            _sut = new RegisterNewApplicationService(_dataStore, _kafkaProducerService);
         }
 
         [Fact]
@@ -93,7 +93,7 @@ namespace Compass.Domain.Tests.Services.RegisterNewApplication
             await _sut.RegisterNewApplicationAsync(appName);
 
             // Assert
-            A.CallTo(() => _kafkaStreamService.StreamToKafka(A<CompassEvent>.That.Matches(
+            A.CallTo(() => _kafkaProducerService.Produce(A<CompassEvent>.That.Matches(
                 compassEvent => compassEvent.EventName == "ApplicationRegistered"
             ))).MustHaveHappened(Repeated.Exactly.Once);
         }

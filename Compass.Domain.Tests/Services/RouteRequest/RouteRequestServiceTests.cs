@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Compass.Domain.DataStore;
 using Compass.Domain.Models;
 using Compass.Domain.Services.GetServiceSubscriptionsForEvent;
-using Compass.Domain.Services.KafkaStream;
+using Compass.Domain.Services.KafkaProducer;
 using Compass.Domain.Services.RouteRequest;
 using Compass.Domain.Services.SendToEndpoint;
 using Compass.Domain.Services.ValidateApplicationToken;
@@ -19,7 +19,7 @@ namespace Compass.Domain.Tests.Services.RouteRequest
         private readonly IRouteRequestService _sut;
         private readonly ISendToEndpointService _sendToEndpointService;
         private readonly IValidateApplicationTokenService _validateApplicationTokenService;
-        private readonly IKafkaStreamService _kafkaStreamService;
+        private readonly IKafkaProducerService _kafkaProducerService;
         private readonly IGetServiceSubscriptionsForEventService _getServiceSubscriptionsForEventService;
         private readonly IDataStore _dataStore;
 
@@ -27,14 +27,14 @@ namespace Compass.Domain.Tests.Services.RouteRequest
         {
             _sendToEndpointService = A.Fake<ISendToEndpointService>();
             _validateApplicationTokenService = A.Fake<IValidateApplicationTokenService>();
-            _kafkaStreamService = A.Fake<IKafkaStreamService>();
+            _kafkaProducerService = A.Fake<IKafkaProducerService>();
             _getServiceSubscriptionsForEventService = A.Fake<IGetServiceSubscriptionsForEventService>();
             _dataStore = A.Fake<IDataStore>();
 
             _sut = new RouteRequestService(
                 _sendToEndpointService,
                 _validateApplicationTokenService,
-                _kafkaStreamService,
+                _kafkaProducerService,
                 _getServiceSubscriptionsForEventService,
                 _dataStore
             );
