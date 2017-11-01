@@ -38,6 +38,7 @@ namespace Compass.Domain.Services.KafkaProducer
             }
             catch (Exception e)
             {
+                // TODO: Log
                 Console.WriteLine(e);
             }
         }
