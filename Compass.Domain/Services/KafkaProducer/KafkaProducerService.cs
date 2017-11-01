@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Compass.Domain.Models;
 using Compass.Shared;
@@ -30,8 +31,15 @@ namespace Compass.Domain.Services.KafkaProducer
 
         public void Produce(CompassEvent compassEvent)
         {
-            _producer.ProduceAsync(_compassEnvironment.GetKafkaTopic(), null, JsonConvert.SerializeObject(compassEvent));
-            _producer.Flush(_compassEnvironment.GetKafkaProducerTimeout());
+            try
+            {
+                _producer.ProduceAsync(_compassEnvironment.GetKafkaTopic(), null, JsonConvert.SerializeObject(compassEvent));
+                _producer.Flush(_compassEnvironment.GetKafkaProducerTimeout());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         private Dictionary<string, object> GetProducerConfig()
