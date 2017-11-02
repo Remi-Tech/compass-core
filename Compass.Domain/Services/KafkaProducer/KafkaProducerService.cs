@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Compass.Domain.Models;
 using Compass.Shared;
@@ -6,7 +7,7 @@ using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using Newtonsoft.Json;
 
-namespace Compass.Domain.Services.KafkaStream
+namespace Compass.Domain.Services.KafkaProducer
 {
     /// <summary>
     /// This class is registered in the DI framework as a singleton 
@@ -15,12 +16,12 @@ namespace Compass.Domain.Services.KafkaStream
     /// connection to Kafka once. With this approach, the time to
     /// produce events to Kafka is single-digit millisecond.
     /// </summary>
-    public class KafkaStreamService : IKafkaStreamService
+    public class KafkaProducerService : IKafkaProducerService
     {
         private readonly ICompassEnvironment _compassEnvironment;
         private readonly Producer<Null, string> _producer;
 
-        public KafkaStreamService(
+        public KafkaProducerService(
             ICompassEnvironment compassEnvironment
         )
         {
@@ -28,10 +29,18 @@ namespace Compass.Domain.Services.KafkaStream
             _producer = new Producer<Null, string>(GetProducerConfig(), null, new StringSerializer(Encoding.UTF8));
         }
 
-        public void StreamToKafka(CompassEvent compassEvent)
+        public void Produce(CompassEvent compassEvent)
         {
-            _producer.ProduceAsync(_compassEnvironment.GetKafkaTopic(), null, JsonConvert.SerializeObject(compassEvent));
-            _producer.Flush(_compassEnvironment.GetKafkaProducerTimeout());
+            try
+            {
+                _producer.ProduceAsync(_compassEnvironment.GetKafkaTopic(), null, JsonConvert.SerializeObject(compassEvent));
+                _producer.Flush(_compassEnvironment.GetKafkaProducerTimeout());
+            }
+            catch (Exception e)
+            {
+                // TODO: Log
+                Console.WriteLine(e);
+            }
         }
 
         private Dictionary<string, object> GetProducerConfig()

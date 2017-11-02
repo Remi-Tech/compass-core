@@ -3,22 +3,22 @@ using System.Threading.Tasks;
 using Compass.Domain.DataStore;
 using Compass.Domain.Exceptions;
 using Compass.Domain.Models;
-using Compass.Domain.Services.KafkaStream;
+using Compass.Domain.Services.KafkaProducer;
 
 namespace Compass.Domain.Services.RegisterNewApplication
 {
     public class RegisterNewApplicationService : IRegisterNewApplicationService
     {
         private readonly IDataStore _dataStore;
-        private readonly IKafkaStreamService _kafkaStreamService;
+        private readonly IKafkaProducerService _kafkaProducerService;
 
         public RegisterNewApplicationService(
             IDataStore dataStore,
-            IKafkaStreamService kafkaStreamService
+            IKafkaProducerService kafkaProducerService
             )
         {
             _dataStore = dataStore;
-            _kafkaStreamService = kafkaStreamService;
+            _kafkaProducerService = kafkaProducerService;
         }
 
         public async Task<RegisteredApplication> RegisterNewApplicationAsync(string applicationName)
@@ -57,7 +57,7 @@ namespace Compass.Domain.Services.RegisterNewApplication
 
         private void SendRegisteredApplicationToKafka(RegisteredApplication registeredApplication)
         {
-            _kafkaStreamService.StreamToKafka(new CompassEvent
+            _kafkaProducerService.Produce(new CompassEvent
             {
                 ApplicationToken = registeredApplication.ApplicationToken,
                 DateCreated = DateTime.UtcNow,
