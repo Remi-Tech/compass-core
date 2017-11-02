@@ -4,8 +4,8 @@ namespace Compass.Domain.Models
 {
     public class CompassResult
     {
-        public ICollection<string> Message { get; set; }
-        public CompassResponseStatus Success { get; set; }
-        public object Response { get; set; } = new List<object>();
+        public ICollection<string> Messages { get; set; }
+        public CompassResponseStatus Status { get; set; }
+        public object Payload { get; set; } = new List<object>();
     }
 }

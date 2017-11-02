@@ -56,12 +56,12 @@ namespace Compass.Domain.Services.RouteRequest
             await Task.WhenAll(registeredApplicationTask, sendToEndpointTask);
             var registeredApplications = await registeredApplicationTask;
             var responses = await sendToEndpointTask;
-            var compassResult = new CompassResult { Success = CompassResponseStatus.Success };
+            var compassResult = new CompassResult { Status = CompassResponseStatus.Success };
 
             if (responses != null)
             {
-                compassResult.Success = GetCompassResponseStatus(responses);
-                compassResult.Response = BuildResponse(registeredApplications, responses);
+                compassResult.Status = GetCompassResponseStatus(responses);
+                compassResult.Payload = BuildResponse(registeredApplications, responses);
             }
 
             return compassResult;
