@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Autofac.Extensions.DependencyInjection;
+using Compass.Shared;
 using Microsoft.AspNetCore;
 
 namespace Compass.CoreServer
@@ -8,6 +9,7 @@ namespace Compass.CoreServer
     {
         public static void Main(string[] args)
         {
+            Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey = CompassEnvironment.AppInsightsKey;
             BuildWebHost(args).Run();
         }
 
@@ -15,6 +17,7 @@ namespace Compass.CoreServer
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services.AddAutofac())
                 .UseStartup<Startup>()
+                .UseApplicationInsights()
                 .Build();
 
     }

@@ -91,5 +91,8 @@ namespace Compass.Shared
                 ? timeout
                 : 100;
         }
+
+        public static string AppInsightsKey => System.Environment.GetEnvironmentVariable("AppInsightsKey");
+
     }
 }
