@@ -33,7 +33,7 @@ namespace Compass.Domain.Services.SendToEndpoint
                     new SendToEndpointResult {ApplicationToken = subscription.ApplicationToken.ToString()};
                 try
                 {
-                    sendToEndpointResult.Result = await SendAsync(subscription.ApplicationUri, compassEvent); 
+                    sendToEndpointResult.Result = await SendAsync(new Uri(subscription.ApplicationUri.ToString() + compassEvent.EventName), compassEvent);
                     sendToEndpointResult.Success = true;
                 }
                 catch (Exception)
